@@ -1,3 +1,12 @@
-from pyrogram import Client
+import asyncio
+from pyrogram import Client, idle
 
-Client("name").run()
+
+async def main():
+    await Client("darrso").start()
+    print("Bot started!")
+    await idle()
+    print("Bot closed!")
+
+if __name__ == "__main__":
+    asyncio.run(main())
