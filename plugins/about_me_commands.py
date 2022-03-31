@@ -2,35 +2,6 @@ import time
 from pyrogram import Client, filters
 from pyrogram.errors import FloodWait
 
-from config import api_id, api_hash
-
-Client = Client('test', api_id, api_hash)
-
-async def translator(text: 'str') -> str:
-    russian = r'йцукенгшщзхъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ'
-    english = 'qwertyuiop[]asdfghjkl;\'zxcvbnm,.QWERTYUIOP{}ASDFGHJKL:"ZXCVBNM<>'
-    russian_dict = {y: x for x, y in zip(russian, english)}
-    english_dict = {x: y for x, y in zip(russian, english)}
-    result = r""
-    for letter in text:
-        if letter in russian:
-            result += english_dict[letter]
-        elif letter in english:
-            result += russian_dict[letter]
-        else:
-            result += letter
-    return result
-
-# .tr       -->        Change text layout
-@Client.on_message(filters.command("tr", prefixes=".") & filters.me)
-async def translate_message(Client, message):
-    try:
-        msg = str(message.text).replace(".tr ", "").strip()
-        msg_result = await translator(msg)
-        await message.edit(msg_result)
-    except FloodWait as e:
-        time.sleep(e.x)
-
 
 # .pf        -->        Portfolio
 @Client.on_message(filters.command("pf", prefixes="."))
@@ -48,11 +19,14 @@ async def my_portfolio(Client, message):
     '<b><a href="https://github.com/darrso/cute_cal">Калькулятор(pyqt)</a></b>\n'
     '<i>Простой калькулятор, написанный с помощью QtDesigner. Будет грустно, если я его не добавлю в этот список :(</i>')
 
-    adm = await Client.get_me()
-    if adm['id'] == message.from_user.id:
-        await message.edit(text)
-    else:
-        await message.reply(text)
+    try:
+        adm = await Client.get_me()
+        if adm['id'] == message.from_user.id:
+            await message.edit(text)
+        else:
+            await message.reply(text)
+    except FloodWait as e:
+        time.sleep(e.x)
 
 
 # .social       -->        Social
@@ -62,27 +36,32 @@ async def social(Client, message):
     '<b>Telegeam</b>: @darrso\n'
     '<b>VK</b>: <a href="vk.com/darrso">@darrso</a>\n'
     '<b>Mail:</b> darrso@yandex.ru')
-    adm = await Client.get_me()
-    if adm['id'] == message.from_user.id:
-        await message.edit(text)
-    else:
-        await message.reply(text)
+    try:
+        adm = await Client.get_me()
+        if adm['id'] == message.from_user.id:
+            await message.edit(text)
+        else:
+            await message.reply(text)
+    except FloodWait as e:
+        time.sleep(e.x)
 
 
 # .commands       -->        List of commands
 @Client.on_message(filters.command("commands", prefixes="."))
 async def check_comands(Client, message):
-    text = ('<b>Команды, доступные в данный момент:</b>\n'
-    '<b>.tr</b> - перевод текста на другую раскладку\n'
-    '<b>.pf</b> - мои проекты на gh\n'
-    '<b>.social</b> - связь\n'
-    '<b>.commands</b> - команды\n\n'
-    '<i>Последнее обновление - 26.03.2022</i>')
+    text = ('<b>Команды, доступные в данный момент:</b>\n\n'
+    '<b><i>.tr</i></b> - перевод текста на другую раскладку\n'
+    '<b><i>.pf</i></b> - мои проекты на gh\n'
+    '<b><i>.social</i></b> - связь\n'
+    '<b><i>.commands</i></b> - команды\n'
+    '<b><i>.wiki</i></b> - запрос в википедии\n\n'
+    '<i>Последнее обновление - 31.03.2022</i>')
+    try:
+        adm = await Client.get_me()
+        if adm['id'] == message.from_user.id:
+            await message.edit(text)
+        else:
+            await message.reply(text)
+    except FloodWait as e:
+        time.sleep(e.x)
 
-    adm = await Client.get_me()
-    if adm['id'] == message.from_user.id:
-        await message.edit(text)
-    else:
-        await message.reply(text)
-
-Client.run()
