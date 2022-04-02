@@ -4,7 +4,7 @@ from pyrogram.errors import FloodWait
 
 
 # .pf        -->        Portfolio
-@Client.on_message(filters.command("pf", prefixes="."))
+@Client.on_message(filters.command("pf", prefixes=".") & filters.private)
 async def my_portfolio(Client, message):
     text = ('<b>Мои проекты на GitHub:</b>\n'
     '<b><a href="https://github.com/darrso/LedMatrixTBot">LedMatrixTBot(aiogram+arduino)</a></b>\n'
@@ -30,7 +30,7 @@ async def my_portfolio(Client, message):
 
 
 # .social       -->        Social
-@Client.on_message(filters.command("social", prefixes="."))
+@Client.on_message(filters.command("social", prefixes=".") & filters.private)
 async def social(Client, message):
     text = ('<b>Связь со мной:</b>\n'
     '<b>Telegeam</b>: @darrso\n'
@@ -47,13 +47,14 @@ async def social(Client, message):
 
 
 # .commands       -->        List of commands
-@Client.on_message(filters.command("commands", prefixes="."))
+@Client.on_message(filters.command("commands", prefixes=".") & filters.private)
 async def check_comands(Client, message):
     text = ('<b>Команды, доступные в данный момент:</b>\n\n'
     '<b><i>.tr</i></b> - перевод текста на другую раскладку\n'
     '<b><i>.pf</i></b> - мои проекты на gh\n'
     '<b><i>.social</i></b> - связь\n'
     '<b><i>.commands</i></b> - команды\n'
+    '<b><i>.toru / .toen</i></b> - перевод с английского на русский/с русского на английский\n'
     '<b><i>.wiki</i></b> - запрос в википедии\n\n'
     '<i>Последнее обновление - 31.03.2022</i>')
     try:
