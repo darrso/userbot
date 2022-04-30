@@ -1,3 +1,4 @@
 pyrogram
 TgCrypto
 wikipedia
+googletrans==3.1.0a0
